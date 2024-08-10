@@ -1,5 +1,12 @@
+from pprint import pprint
+
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.shortcuts import render
+
+#venv/scripts/activate
+
+
 DATA = {
     'omlet': {
         'яйца, шт': 2,
@@ -20,30 +27,54 @@ DATA = {
 }
 
 
+
 def get_omlet(request):
-    quan = request.GET.get('quantity')
-    a =0
-    if quan != None:
-        quan = int(quan)
-        rec = DATA["omlet"]
-        context = {
-            'recipe':{
-                'яйца': f"количество{in1}"
-
-            }
+    quan = request.GET.get('servings', 1)
+    rec = {}
+    quan = int(quan)
+    rec = DATA["omlet"]
+    in1 = rec['яйца, шт']*quan
+    in2 = rec['молоко, л']*quan
+    in3 = rec['соль, ч.л.']*quan
+    context = {
+        'яйца': in1,
+        'молоко': in2,
+        'соль': in3
         }
+    return render(request, "calculator/omlet.html", context)
 
-    return HttpResponse(f"hello {a['яйца, шт']}")
+def get_pasta(request):
+    quan = request.GET.get('servings', 1)
+    rec = {}
+    quan = int(quan)
+    rec = DATA["pasta"]
+    print(rec)
+    in1 = rec['макароны, г'] * quan
+    in2 = rec['сыр, г'] * quan
+    print(in2, in1)
+    context = {
+        'макароны': in1,
+        'сыр': in2
+    }
+    pprint(context)
+
+    return render(request, "calculator/pasta.html", context)
+
+def get_buter(request):
+    quan = request.GET.get('servings', 1)
+    rec = {}
+    quan = int(quan)
+    rec = DATA["buter"]
+    in1 = rec['хлеб, ломтик']*quan
+    in2 = rec['колбаса, ломтик']*quan
+    in3 = rec['сыр, ломтик']*quan
+    in4 = rec['помидор, ломтик'] * quan
+    context = {
+        'хлеб': in1,
+        'колбаса': in2,
+        'сыр': in3,
+        'помидор': in4
+        }
+    return render(request, "calculator/buter.html", context)
 
 
-
-
-# Напишите ваш обработчик. Используйте DATA как источник данных
-# Результат - render(request, 'calculator/index.html', context)
-# В качестве контекста должен быть передан словарь с рецептом:
-# context = {
-#   'recipe': {
-#     'ингредиент1': количество1,
-#     'ингредиент2': количество2,
-#   }
-# }
